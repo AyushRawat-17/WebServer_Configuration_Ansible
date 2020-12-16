@@ -1,0 +1,4 @@
+webdir: "/var/www/ayush"
+webcontent: "/root/webserverws_ansible/index.html"
+confsrc: "/root/webserverws_ansible/web.conf" 
+confdest: "/etc/httpd/conf.d/ayush.conf"

@@ -1,0 +1,39 @@
+- hosts: webserver
+  vars_files:
+        - "/root/webserverws_ansible/variables.yml"
+  tasks:
+   - name: Installing httpd package
+     package:
+        name: httpd
+        state: present
+
+   - name: Creating Webserver Directory
+     file:
+        path: "{{webdir}}"
+        state: directory
+
+   - name: Copying Website Content 
+     copy:
+        src: "{{ webcontent }}"
+        dest: "{{ webdir }}"
+
+   - name: Changing Configuration File
+     template:
+        src: "{{ confsrc }}"
+        dest: "{{ confdest }}"
+     notify: Restarting httpd services
+
+   - name: Configuring Firewall
+     firewalld:
+        port: "8080/tcp"
+        state: enabled
+        permanent: yes
+        immediate: yes
+
+  handlers:       
+    - name: Restarting httpd services
+      service:
+         name: httpd
+         state: restarted
+
+
